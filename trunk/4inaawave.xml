@@ -130,6 +130,8 @@
 					slot = this._get(row, col)
 					if (slot != EMPTY_SLOT) {
 						slot = slot[0]
+					} else {
+						slot = ' '
 					}
 					str += slot + ' '
 				}
@@ -159,8 +161,8 @@
 		function drawSquare(viewerId, row, col) {
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
 			//slot = $('.row:eq(' + (6 - row) + ') .col:eq(' + (col - 1) + ')')
-			slot = $('.row:eq(1) .col:eq(1)')
-			debugPrint(slot)
+			//slot = $('.row:eq(1) .col:eq(1)')
+			slot = $('.row .col')[2][3]
 			slot.css('background', userFace)
 		}
 
