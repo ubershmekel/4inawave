@@ -156,7 +156,7 @@
 		
 		function restart() {
 			var state = wave.getState();
-			debugPrint('state = ' + state + '\nBLANK = ' + Grid.BLANK);
+			debugPrint('state = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK));
 			state.submitValue(GRID_NAME, Grid.BLANK);
 		}
 		
