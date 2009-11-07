@@ -102,10 +102,10 @@
 
 		Grid.prototype.toString = function() {
 		  var str = ''
-		  for (var row = Grid.NUM_ROWS; row > 0; row -= 1) {
+		  for (var row = Grid.NUM_ROWS - 1; row >= 0; row -= 1) {
 			str += row + ' '
 			for (var col = 0; col < Grid.NUM_COLS; col += 1) {
-			  str += this._get(row-1, col) + ' '
+			  str += this._get(row, col) + ' '
 			}
 			str += '\n'
 		  }
@@ -121,11 +121,11 @@
 		  var viewerId = wave.getViewer().getId();
 		  debugPrint('viewerId = ' + viewerId);
 		  var state = wave.getState();
-		  var grid = state.get('grid', new Grid);
+		  var grid = new Grid(state.get('grid', (new Grid).hash()));
 		  grid = grid.drop(col, viewerId[0]);
 		  debugPrint('grid = ' + grid.toString());
 		  delta = {};
-		  delta['grid'] = grid;
+		  delta['grid'] = grid.hash();
 		  state.submitDelta(delta);
 		}
 
@@ -179,13 +179,13 @@
     <table id='board' cellpadding='0' cellspacing='0'>
       <thead>
         <tr>
+          <th> <button class='dropper mine' onclick='drop(0)'></button> </th>
           <th> <button class='dropper mine' onclick='drop(1)'></button> </th>
           <th> <button class='dropper mine' onclick='drop(2)'></button> </th>
           <th> <button class='dropper mine' onclick='drop(3)'></button> </th>
           <th> <button class='dropper mine' onclick='drop(4)'></button> </th>
           <th> <button class='dropper mine' onclick='drop(5)'></button> </th>
           <th> <button class='dropper mine' onclick='drop(6)'></button> </th>
-          <th> <button class='dropper mine' onclick='drop(7)'></button> </th>
         </tr>
       </thead>
       <tbody>
