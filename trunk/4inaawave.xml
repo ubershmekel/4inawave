@@ -36,9 +36,7 @@
 		
 		function restart() {
 			var state = wave.getState();
-			delta = {};
-			delta[GRID_NAME] = null;
-			state.submitDelta(delta);
+			state.submitValue(GRID_NAME, null);
 		}
 		
 		function getGridFromState(state){
