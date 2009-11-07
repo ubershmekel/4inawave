@@ -24,7 +24,16 @@
 		
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'/></script>
 		<script type='text/javascript'>
-	
+		
+		String.format = function() {
+			var s = arguments[0];
+			for (var i = 0; i < arguments.length - 1; i++) {
+				var reg = new RegExp("\\{" + i + "\\}", "gm");
+				s = s.replace(reg, arguments[i + 1]);
+			}
+		  return s;
+		}
+
 		function getGridFromState(state){
 			grid = new Grid(state.get(GRID_NAME, ''))
 			return grid
@@ -162,7 +171,9 @@
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
 			//slot = $('.row:eq(' + (6 - row) + ') .col:eq(' + (col - 1) + ')')
 			//slot = $('.row:eq(1) .col:eq(1)')
-			slot = $('.row .col')[2][3]
+			query = String.Format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
+			debugPrint(query)
+			slot = $(query)
 			slot.css('background', userFace)
 		}
 
