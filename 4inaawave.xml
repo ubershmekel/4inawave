@@ -152,10 +152,10 @@
 			var state = wave.getState();
 			debugPrint(state.toString());
 			var grid = getGridFromState(state);
-			for (var row = Grid.NUM_ROWS; row > 0; row -= 1) {
-				for (var col = 0; col < Grid.NUM_COLS; col += 1) {
+			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
+				for (var col = 0; col < Grid.NUM_COLS; ++col) {
 					id = grid._get(row, col);
-					if (id != ' '){
+					if (id != EMPTY_SLOT){
 						drawSquare(id, row, col);
 					}
 				}
