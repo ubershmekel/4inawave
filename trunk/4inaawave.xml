@@ -12,6 +12,7 @@
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
+	<pre id="debug" style="float:left;">&nbsp;</pre>
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'/></script>
     <script type='text/javascript'>
 	
@@ -135,7 +136,7 @@
 		}
 
 		function renderInfo() {
-			alert('bla!');
+			alert('renderInfo!');
 			if (!wave.getState()) {
 				return;
 			}
@@ -155,11 +156,13 @@
 		}
 		
 		function init() {
+		  alert('init!');
 		  if (wave && wave.isInWaveContainer()) {
 			wave.setStateCallback(renderInfo);
 			wave.setParticipantCallback(renderInfo);
 		  }
 		}
+		
 		debugPrint('Starting');
 		gadgets.util.registerOnLoadHandler(init);
 
@@ -175,7 +178,6 @@
 
       .mine   { background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center; }
     </style>
-	<pre id="debug" style="float:left;">&nbsp;</pre>
     <button id='restart' onclick='restart()'><img src='http://www.raphscallion.com/gadgets/fourinarow/gui/restart.png' alt='restart'/></button>
     <br/><br/>
     <table id='board' cellpadding='0' cellspacing='0'>
