@@ -158,8 +158,9 @@
 
 		function drawSquare(viewerId, row, col) {
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
-			debugPrint(userFace)
-			$('.row:eq('+(6 - row) + ') .col:eq(' + (col - 1) + ')').css('background', userFace)
+			slot = $('.row:eq(' + (6 - row) + ') .col:eq(' + (col - 1) + ')')
+			debugPrint(slot)
+			slot.css('background', userFace)
 		}
 
 		function renderInfo() {
