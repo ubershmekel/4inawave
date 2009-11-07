@@ -120,7 +120,7 @@
 		}
 		
 		function drop(col) {
-		  var viewerId = wave.getViewer().getId();
+		  var viewerId = wave.getViewer().getId()[0];
 		  debugPrint('viewerId = ' + viewerId);
 		  var state = wave.getState();
 		  var grid = state.get('grid', new Grid);
