@@ -33,7 +33,14 @@
 			}
 		  return s;
 		}
-
+		
+		function restart() {
+			var state = wave.getState();
+			delta = {};
+			delta[GRID_NAME] = null;
+			state.submitDelta(delta);
+		}
+		
 		function getGridFromState(state){
 			grid = new Grid(state.get(GRID_NAME, ''))
 			return grid
@@ -169,8 +176,6 @@
 
 		function drawSquare(viewerId, row, col) {
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
-			//slot = $('.row:eq(' + (6 - row) + ') .col:eq(' + (col - 1) + ')')
-			//slot = $('.row:eq(1) .col:eq(1)')
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			debugPrint(query)
 			slot = $(query)
@@ -208,12 +213,23 @@
 		</script>
 
 		<style type='text/css'>
-			.col								 { border: 1px solid gray; height: 32px; width: 32px; }
-			.col:first-child		 { border-left: 2px solid gray; }
-			.col:last-child			{ border-right: 2px solid gray; }
+			.col {
+				border: 1px solid gray; height: 32px; width: 32px;
+			}
+			.col:first-child {
+				border-left: 2px solid gray;
+			}
+			.col:last-child {
+				border-right: 2px solid gray;
+			}
 
-			.dropper			 { height: 38px; width: 100%; border: 0px }
-			.dropper:hover { background-position: bottom center }
+			.dropper {
+				height: 38px; width: 100%; border: 0px;
+			}
+			
+			.dropper:hover {
+				background-position: bottom center;
+			}
 
 			.mine	 { background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center; }
 		</style>
