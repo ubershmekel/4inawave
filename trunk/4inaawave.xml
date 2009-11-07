@@ -36,7 +36,7 @@
 		
 		function restart() {
 			var state = wave.getState();
-			state.submitValue(GRID_NAME, null);
+			state.submitValue(GRID_NAME, Grid.BLANK);
 		}
 		
 		function getGridFromState(state){
@@ -166,9 +166,8 @@
 			var grid = getGridFromState(state);
 			grid.drop(col, viewerId);
 			debugPrint('grid = \n' + grid.toString());
-			delta = {};
-			delta[GRID_NAME] = grid.hash();
-			state.submitDelta(delta);
+			
+			state.submitValue(GRID_NAME, grid.hash());
 		}
 
 
@@ -184,7 +183,7 @@
 			if (!wave.getState()) {
 				return;
 			}
-			debugPrint('draw');
+			
 			var state = wave.getState();
 			var grid = getGridFromState(state);
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
