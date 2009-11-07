@@ -2,7 +2,7 @@
 <Module>
 	<ModulePrefs title="Four in a Wave"
 		description="Play the familiar game with your friends on a Google Wave"
-		author="Yuval (Kalugny & Greenfield) (based on code by Raphael Speyer)"
+		author="Yuval (Kalugny and Greenfield) (based on code by Raphael Speyer)"
 		author_email=""
 		author_location="" height="300"
 		screenshot="http://rspeyer.googlepages.com/connect4_screenshot.png"
