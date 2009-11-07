@@ -34,11 +34,6 @@
 		  return s;
 		}
 		
-		function restart() {
-			var state = wave.getState();
-			state.submitValue(GRID_NAME, Grid.BLANK);
-		}
-		
 		function getGridFromState(state){
 			grid = new Grid(state.get(GRID_NAME, ''))
 			return grid
@@ -159,6 +154,12 @@
 			document.getElementById('debug').innerHTML = text + '\n' + document.getElementById('debug').innerHTML;
 		}
 		
+		function restart() {
+			var state = wave.getState();
+			debugPrint('state = ' + state + '\nBLANK = ' + Grid.BLANK);
+			state.submitValue(GRID_NAME, Grid.BLANK);
+		}
+		
 		function drop(col) {
 			var viewerId = wave.getViewer().getId();
 			debugPrint('viewerId = ' + viewerId);
@@ -174,7 +175,6 @@
 		function drawSquare(viewerId, row, col) {
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
-			debugPrint(query)
 			slot = $(query)
 			slot.css('background', userFace)
 		}
