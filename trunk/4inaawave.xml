@@ -171,7 +171,7 @@
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
 			//slot = $('.row:eq(' + (6 - row) + ') .col:eq(' + (col - 1) + ')')
 			//slot = $('.row:eq(1) .col:eq(1)')
-			query = String.Format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
+			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			debugPrint(query)
 			slot = $(query)
 			slot.css('background', userFace)
