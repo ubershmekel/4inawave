@@ -11,7 +11,16 @@
 	</ModulePrefs>
 	<Content type="html">
 		<![CDATA[
-	<pre id="debug" style="float:left;">&nbsp;</pre>
+		
+		<style type='text/css'>
+			#debug {
+				float: left;
+				height: 5em;
+				overflow: scroll;
+			}
+		</style>
+		<pre id="debug">&nbsp;</pre>
+		
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'/></script>
 		<script type='text/javascript'>
 	
@@ -146,7 +155,7 @@
 
 		function drawSquare(viewerId, row, col) {
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
-			$('.row:eq('+(6-row)+') .col:eq('+(col-1)+')').css('background', userFace)
+			$('.row:eq('+(6 - row) + ') .col:eq(' + (col - 1) + ')').css('background', userFace)
 		}
 
 		function renderInfo() {
