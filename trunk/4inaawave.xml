@@ -118,12 +118,16 @@
 			document.getElementById('debug').innerHTML = text + '\n' + document.getElementById('debug').innerHTML;
 		}
 		
+		function getGridFromState(state){
+			return new Grid(state.get('grid', (new Grid).hash()));
+		}
+		
 		function drop(col) {
 		  var viewerId = wave.getViewer().getId();
 		  debugPrint('viewerId = ' + viewerId);
 		  var state = wave.getState();
-		  var grid = new Grid(state.get('grid', (new Grid).hash()));
-		  grid = grid.drop(col, viewerId[0]);
+		  var grid = getGridFromState(state);
+		  grid = grid.drop(col, );
 		  debugPrint('grid = ' + grid.toString());
 		  delta = {};
 		  delta['grid'] = grid.hash();
@@ -136,14 +140,13 @@
 		}
 
 		function renderInfo() {
-			alert('renderInfo!');
 			if (!wave.getState()) {
 				return;
 			}
 			debugPrint('draw');
 			var state = wave.getState();
 			debugPrint(state.toString());
-			var grid = state.get('grid', new Grid)
+			var grid = getGridFromState(state);
 			for (var row = Grid.NUM_ROWS; row > 0; row -= 1) {
 				for (var col = 0; col < Grid.NUM_COLS; col += 1) {
 					id = grid._get(row, col);
@@ -156,7 +159,6 @@
 		}
 		
 		function init() {
-		  alert('init!');
 		  if (wave && wave.isInWaveContainer()) {
 			wave.setStateCallback(renderInfo);
 			wave.setParticipantCallback(renderInfo);
