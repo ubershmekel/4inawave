@@ -15,9 +15,9 @@
 		<style type='text/css'>
 			#debug {
 				float: left;
-				height: 10em;
+				height: 20em;
 				overflow: scroll;
-				width: 10em;
+				width: 20em;
 			}
 		</style>
 		<pre id="debug">&nbsp;</pre>
@@ -156,6 +156,7 @@
 
 		function drawSquare(viewerId, row, col) {
 			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
+			debugPrint(userFace)
 			$('.row:eq('+(6 - row) + ') .col:eq(' + (col - 1) + ')').css('background', userFace)
 		}
 
@@ -165,7 +166,6 @@
 			}
 			debugPrint('draw');
 			var state = wave.getState();
-			debugPrint(state.toString());
 			var grid = getGridFromState(state);
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
 				for (var col = 0; col < Grid.NUM_COLS; ++col) {
