@@ -16,8 +16,7 @@
 		<script type='text/javascript'>
 	
 		function getGridFromState(state){
-			//grid = new Grid(state.get('grid', (new Grid).hash()));
-			grid = new Grid(state.get('grid', ''))
+			grid = new Grid(state.get('grid_a', ''))
 			return grid
 		}
 		
