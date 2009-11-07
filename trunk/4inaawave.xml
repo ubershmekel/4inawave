@@ -107,14 +107,14 @@
 			for (var col = 0; col < Grid.NUM_COLS; col += 1) {
 			  str += this._get(row-1, col) + ' '
 			}
-			str += '<br/>'
+			str += '\n'
 		  }
-		  str += '  1 2 3 4 5 6 7 <br/>'
+		  str += '  1 2 3 4 5 6 7 \n'
 		  return str
 		}
 		
 		function debugPrint(text){
-			document.getElementById('debug').innerHTML = document.getElementById('debug').innerHTML + text + '<br/>';
+			document.getElementById('debug').innerHTML = document.getElementById('debug').innerHTML + text + '\n';
 		}
 		
 		function drop(col) {
@@ -173,7 +173,7 @@
 
       .mine   { background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center; }
     </style>
-	<div id="debug" style="float:left;">&nbsp;</div>
+	<pre id="debug" style="float:left;">&nbsp;</pre>
     <button id='restart' onclick='restart()'><img src='http://www.raphscallion.com/gadgets/fourinarow/gui/restart.png' alt='restart'/></button>
     <br/><br/>
     <table id='board' cellpadding='0' cellspacing='0'>
