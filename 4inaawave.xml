@@ -114,7 +114,7 @@
 		}
 		
 		function debugPrint(text){
-			document.getElementById('debug').innerHTML = document.getElementById('debug').innerHTML + text + '\n';
+			document.getElementById('debug').innerHTML = text + '\n' + document.getElementById('debug').innerHTML;
 		}
 		
 		function drop(col) {
