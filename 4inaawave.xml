@@ -173,7 +173,7 @@
 
       .mine   { background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center; }
     </style>
-	<div id="debug" style="float: right;">&nbsp;</div>
+	<div id="debug" style="float:left;">&nbsp;</div>
     <button id='restart' onclick='restart()'><img src='http://www.raphscallion.com/gadgets/fourinarow/gui/restart.png' alt='restart'/></button>
     <br/><br/>
     <table id='board' cellpadding='0' cellspacing='0'>
