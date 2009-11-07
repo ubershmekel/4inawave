@@ -26,7 +26,7 @@
 		<script type='text/javascript'>
 	
 		function getGridFromState(state){
-			grid = new Grid(state.get('grid_a', ''))
+			grid = new Grid(state.get(GRID_NAME, ''))
 			return grid
 		}
 		
@@ -45,10 +45,12 @@
 				return JSON.stringify(pieces)
 			}
 		}
-
+		
+		GRID_NAME = 'grid_0'
+		EMPTY_SLOT = ''
+		
 		Grid.NUM_ROWS = 6
 		Grid.NUM_COLS = 7
-		EMPTY_SLOT = ''
 		Grid.DIR_PAIRS = [['NE','SW'], ['E','W'], ['SE','NW'], ['N','S']]
 		Grid.BLANK = [[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT],
 						[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT],
@@ -133,7 +135,7 @@
 				}
 				str += '\n'
 			}
-			str += '	1 2 3 4 5 6 7 \n'
+			str += '  1 2 3 4 5 6 7 \n'
 			return str
 		}
 		
@@ -149,7 +151,7 @@
 			grid.drop(col, viewerId);
 			debugPrint('grid = \n' + grid.toString());
 			delta = {};
-			delta['grid'] = grid.hash();
+			delta[GRID_NAME] = grid.hash();
 			state.submitDelta(delta);
 		}
 
