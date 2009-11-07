@@ -15,8 +15,9 @@
 		<style type='text/css'>
 			#debug {
 				float: left;
-				height: 5em;
+				height: 10em;
 				overflow: scroll;
+				width: 10em;
 			}
 		</style>
 		<pre id="debug">&nbsp;</pre>
