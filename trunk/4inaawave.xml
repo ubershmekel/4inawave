@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Four in a Wave"
+  description="Play the familiar game with your friends on a Google Wave"
+  author="Yuval Kalugny (based on code by Raphael Speyer)"
+  author_email=""
+  author_location="" height="300"
+  screenshot="http://rspeyer.googlepages.com/connect4_screenshot.png"
+  thumbnail="http://rspeyer.googlepages.com/connect4_thumbnail.png">
+
+    <Require feature="wave" />
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+	
+	<div id="debug">&nbsp;</div>
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'/></script>
+    <script type='text/javascript'>
+	
+		function Grid(other) { 
+		  var pieces = other || Grid.BLANK
+
+		  this._get = function(row, col) {
+			var index = row * Grid.NUM_COLS + parseInt(col)
+			return pieces.charAt(index)
+		  }
+
+		  this._set = function(row, col, value) {
+			var index = row * Grid.NUM_COLS + parseInt(col)
+			var changed = pieces.slice(0, index) + value + pieces.slice(index + 1)
+			return new Grid(changed)
+		  }
+		  
+		  this.hash = function() {
+			return pieces
+		  }
+		}
+
+		Grid.NUM_ROWS = 6
+		Grid.NUM_COLS = 7
+		Grid.DIR_PAIRS = [['NE','SW'], ['E','W'], ['SE','NW'], ['N','S']]
+		Grid.BLANK = '                                          '
+
+		Grid.prototype.drop = function(col, player_id) {
+		  var row = this.topFreeRow(col)
+		  if (row == -1) throw 'column full'
+		  return this._set(row, col, player_id)
+		}
+
+		Grid.prototype.topFreeRow = function(col) {
+		  for (var row = 0; row < Grid.NUM_ROWS; row += 1) {
+			if (this._get(row,col)==' ') {
+			  return row
+			}
+		  }
+		  return -1
+		}
+
+		Grid.prototype.connects4 = function(player, col) {
+		  var row = this.topFreeRow(col)-1
+		  if (row < 0) { row = Grid.NUM_ROWS-1 } // TODO clean up
+		  for (var i in Grid.DIR_PAIRS) {
+			var dirs = Grid.DIR_PAIRS[i]
+			var first = this.lineLength(player, row, col, dirs[0], 0)
+			var second = this.lineLength(player, row, col, dirs[1], 0)
+			var length = first + second
+			if (length > 4) { 
+			  return true
+			}
+		  }
+		  return false
+		}
+
+		Grid.prototype.lineLength = function(player, row, col, direction) {
+		  if (0 > row || row >= Grid.NUM_ROWS || 0 > col || col >= Grid.NUM_COLS) {
+			return 0
+		  }
+		  var whose = this._get(row, col)
+		  if (whose == player.id) { // still on the line 
+			var next = this.nextCoords(row, col, direction)
+			return 1 + this.lineLength(player, next[0], next[1], direction)
+		  } else {
+			return 0 
+		  }
+		}
+
+		Grid.prototype.nextCoords = function(row, col, direction) {
+		  switch(direction) {
+			case 'NE': return [row+1, col+1];
+			case 'SW': return [row-1, col-1];
+			case 'E' : return [row  , col+1];
+			case 'W' : return [row  , col-1];
+			case 'SE': return [row-1, col+1];
+			case 'NW': return [row+1, col-1];
+			case 'N' : return [row+1, col  ];
+			case 'S' : return [row-1, col  ];
+			default: throw 'WTF is '+direction+'?'
+		  }
+		}
+
+		Grid.prototype.evaluate = function(player1, player2) {
+		  return 0
+		}
+
+		Grid.prototype.toString = function() {
+		  var str = ''
+		  for (var row = Grid.NUM_ROWS; row > 0; row -= 1) {
+			str += row + ' '
+			for (var col = 0; col < Grid.NUM_COLS; col += 1) {
+			  str += this._get(row-1, col) + ' '
+			}
+			str += '\n'
+		  }
+		  str += '  1 2 3 4 5 6 7 \n'
+		  return str
+		}
+		
+		function debugPrint(text){
+			document.getElementById('debug').innerHTML += text + '<br/>';
+		}
+		
+		function drop(col) {
+		  var viewerId = wave.getViewer().getId();
+		  var state = wave.getState();
+		  var grid = state.get('grid', new Grid);
+		  grid.drop(col, viewerId);
+		  delta = {};
+		  delta['grid'] = grid;
+		  state.submitDelta(delta);
+		}
+
+
+		function drawSquare(viewerId, row, col) {
+		  $('.row:eq('+(6-row)+') .col:eq('+(col-1)+')').style['background'] = "url('"+ wave.getParticipantById(viewerId).getThumbnailUrl() +"') no-repeat top center";
+		}
+
+		function renderInfo() {
+			if (!wave.getState()) {
+				return;
+			}
+			var state = wave.getState();
+			debugPrint(state.toString());
+			var grid = state.get('grid', new Grid)
+			for (var row = Grid.NUM_ROWS; row > 0; row -= 1) {
+				for (var col = 0; col < Grid.NUM_COLS; col += 1) {
+					id = grid._get(row, col);
+					if (id != ' '){
+						drawSquare(id, row, col);
+					}
+				}
+			}
+		  
+		}
+		
+		function init() {
+		  if (wave && wave.isInWaveContainer()) {
+			wave.setStateCallback(renderInfo);
+			wave.setParticipantCallback(renderInfo);
+		  }
+		}
+		debugPrint('Starting');
+		gadgets.util.registerOnLoadHandler(init);
+
+    </script>
+
+    <style type='text/css'>
+      .col                 { border: 1px solid gray; height: 32px; width: 32px; }
+      .col:first-child     { border-left: 2px solid gray; }
+      .col:last-child      { border-right: 2px solid gray; }
+
+      .dropper       { height: 38px; width: 100%; border: 0px }
+      .dropper:hover { background-position: bottom center }
+
+      .mine   { background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center; }
+    </style>
+    <button id='restart' onclick='restart()'><img src='http://www.raphscallion.com/gadgets/fourinarow/gui/restart.png' alt='restart'/></button>
+    <br/><br/>
+    <table id='board' cellpadding='0' cellspacing='0'>
+      <thead>
+        <tr>
+          <th> <button class='dropper mine' onclick='drop(1)'></button> </th>
+          <th> <button class='dropper mine' onclick='drop(2)'></button> </th>
+          <th> <button class='dropper mine' onclick='drop(3)'></button> </th>
+          <th> <button class='dropper mine' onclick='drop(4)'></button> </th>
+          <th> <button class='dropper mine' onclick='drop(5)'></button> </th>
+          <th> <button class='dropper mine' onclick='drop(6)'></button> </th>
+          <th> <button class='dropper mine' onclick='drop(7)'></button> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
+        <tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
+        <tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
+        <tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
+        <tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
+        <tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
+      </tbody>
+    </table>
+
+]]>
+</Content>
+</Module>
