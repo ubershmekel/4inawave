@@ -124,6 +124,7 @@
 		  debugPrint('viewerId = ' + viewerId);
 		  var state = wave.getState();
 		  var grid = state.get('grid', new Grid);
+		  debugPrint('grid = ' + grid.toString());
 		  grid.drop(col, viewerId);
 		  delta = {};
 		  delta['grid'] = grid;
