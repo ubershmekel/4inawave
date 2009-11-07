@@ -115,7 +115,11 @@
 			for (var row = Grid.NUM_ROWS - 1; row >= 0; row -= 1) {
 				str += row + ' '
 				for (var col = 0; col < Grid.NUM_COLS; col += 1) {
-					str += this._get(row, col)[0] + ' '
+					slot = this._get(row, col)
+					if (slot != EMPTY_SLOT) {
+						slot = slot[0]
+					}
+					str += slot + ' '
 				}
 				str += '\n'
 			}
@@ -133,7 +137,7 @@
 			var state = wave.getState();
 			var grid = getGridFromState(state);
 			grid.drop(col, viewerId);
-			debugPrint('grid = ' + grid.toString());
+			debugPrint('grid = \n' + grid.toString());
 			delta = {};
 			delta['grid'] = grid.hash();
 			state.submitDelta(delta);
@@ -141,7 +145,8 @@
 
 
 		function drawSquare(viewerId, row, col) {
-			$('.row:eq('+(6-row)+') .col:eq('+(col-1)+')').style['background'] = "url('"+ wave.getParticipantById(viewerId).getThumbnailUrl() +"') no-repeat top center";
+			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
+			$('.row:eq('+(6-row)+') .col:eq('+(col-1)+')').css('background', userFace)
 		}
 
 		function renderInfo() {
