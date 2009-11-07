@@ -135,6 +135,7 @@
 		}
 
 		function renderInfo() {
+			alert('bla!');
 			if (!wave.getState()) {
 				return;
 			}
