@@ -182,6 +182,7 @@
 		}
 
 		function renderInfo() {
+			debugPrint('renderInfo')
 			if (!wave.getState()) {
 				return;
 			}
