@@ -181,8 +181,8 @@
 			debugPrint('state1 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_KEY);
 			
 			state.submitDelta({
-				GRID_KEY: null,
-				LAST_PLAYER_KEY: null
+				GRID_KEY: '',
+				LAST_PLAYER_KEY: ''
 				})
 			//state.submitValue(GRID_KEY, null);
 			//state.submitValue(LAST_PLAYER_KEY, null);
