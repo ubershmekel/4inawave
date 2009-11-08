@@ -175,11 +175,10 @@
 		}
 
 
-		function drawSquare(viewerId, row, col) {
-			userFace = "url('" + wave.getParticipantById(viewerId).getThumbnailUrl() + "') no-repeat top center"
+		function drawSquare(style, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			slot = $(query)
-			slot.css('background', userFace)
+			slot.css('background', style)
 		}
 
 		function renderInfo() {
@@ -191,10 +190,15 @@
 			var grid = getGridFromState(state);
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
 				for (var col = 0; col < Grid.NUM_COLS; ++col) {
-					id = grid._get(row, col);
-					if (id != EMPTY_SLOT){
-						drawSquare(id, row, col);
+					slot = grid._get(row, col);
+					if (slot != EMPTY_SLOT) {
+						id = slot
+						userFace = "url('" + wave.getParticipantById(id).getThumbnailUrl() + "') no-repeat top center"
+						style = userFace
+					} else {
+						style = ""
 					}
+					drawSquare(style, row, col);
 				}
 			}
 			
