@@ -159,8 +159,9 @@
 			debugPrint('state1 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_NAME);
 			//state.submitValue(GRID_NAME, null);
 			//state.submitValue(GRID_NAME, JSON.stringify(Grid.BLANK));
-            state.reset()
+			state.reset()
 			debugPrint('state2 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_NAME);
+			state.invoke()
 		}
 		
 		function drop(col) {
@@ -236,9 +237,11 @@
 				background-position: bottom center;
 			}
 
-			.mine	 { background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center; }
+			.mine	 {
+				background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center;
+			}
 		</style>
-		<button id='restart' onclick='restart()'><img src='http://www.raphscallion.com/gadgets/fourinarow/gui/restart.png' alt='restart'/></button>
+		<button id='restart' onClick='restart()'><img src='http://www.raphscallion.com/gadgets/fourinarow/gui/restart.png' alt='restart'/></button>
 		<br/><br/>
 		<table id='board' cellpadding='0' cellspacing='0'>
 			<thead>
