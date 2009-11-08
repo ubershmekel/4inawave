@@ -71,7 +71,14 @@
 		GRID_KEY = 'grid_0'
 		LAST_PLAYER_KEY = 'last_playa'
 		EMPTY_SLOT = ''
-		PATIENCE_QUOTES = ["All human wisdom is summed up in two words - wait and hope", "Patience is the companion of wisdom.", "The two most powerful warriors are patience and time.", "He that can have Patience, can have what he will", "Patience and fortitude conquer all things", "Just wait for your turn, ever hear of manners?"]
+		PATIENCE_QUOTES = ["All human wisdom is summed up in two words - wait and hope",
+			"Patience is the companion of wisdom.",
+			"The two most powerful warriors are patience and time.",
+			"He that can have Patience, can have what he will",
+			"Patience and fortitude conquer all things",
+			"You can't hurry love, no you just have to wait.",
+			"I'd say 'hold your horses' but you don't have a horse, do you.",
+			"Just wait for your turn, ever hear of manners?"]
 		
 		Grid.NUM_ROWS = 6
 		Grid.NUM_COLS = 7
@@ -309,7 +316,7 @@
 				<tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
 			</tbody>
 		</table>
-
+		<div class="makes_space" style="height: 32px;">&nbsp;</div>
 ]]>
 </Content>
 </Module>
