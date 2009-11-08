@@ -34,14 +34,27 @@
 		  return s;
 		}
 		
-		function getGridFromState(state){
+		function getGridFromState(state) {
 			grid = new Grid(state.get(GRID_NAME, ''))
 			return grid
 		}
 		
-		function Grid(jsonGrid) { 
-			var pieces = JSON.parse(jsonGrid) || Grid.BLANK
-
+		function DeepCopy(oldObject) {
+			var newObject = jQuery.extend(true, {}, oldObject);
+			return newObject
+		}
+		
+		function Grid(jsonGrid) {
+			parsedGrid = JSON.parse(jsonGrid)
+			var pieces
+			
+			if (parsedGrid) {
+				pieces = parsedGrid
+			} else {
+				// copy constructor
+				pieces = DeepCopy(Grid.BLANK)
+			}
+			
 			this._get = function(row, col) {
 				return pieces[row][col]
 			}
