@@ -17,7 +17,7 @@
 				float: right;
 				height: 20em;
 				overflow: scroll;
-				width: 30em;
+				width: 20em;
 			}
 		</style>
 		<pre id="debug">&nbsp;</pre>
@@ -192,7 +192,11 @@
 		function drawSquare(style, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			slot = $(query)
-			slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" />', style))
+			if (style) {
+				slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" />', style))
+			} else {
+				slot.html('')
+			}
 			//slot.css('background', style)
 		}
 
@@ -235,8 +239,8 @@
 		<style type='text/css'>
 			.col {
 				border: 1px solid gray;
-				height: 32px;
-				width: 32px;
+				height: 34px;
+				width: 34px;
 				padding: 0px;
 			}
 			.col:first-child {
