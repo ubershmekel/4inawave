@@ -187,12 +187,13 @@
 			
 			state.submitValue(GRID_NAME, grid.hash());
 		}
-
-
+		
+		
 		function drawSquare(style, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			slot = $(query)
-			slot.css('background', style)
+			slot.html('<img src="{0}" style="width:32px; height:32px;" />'.format(style))
+			//slot.css('background', style)
 		}
 
 		function renderInfo() {
@@ -233,7 +234,10 @@
 
 		<style type='text/css'>
 			.col {
-				border: 1px solid gray; height: 32px; width: 32px;
+				border: 1px solid gray;
+				height: 32px;
+				width: 32px;
+				padding: 0px;
 			}
 			.col:first-child {
 				border-left: 2px solid gray;
