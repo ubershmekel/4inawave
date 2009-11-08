@@ -179,6 +179,10 @@
 			debugPrint('state2 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_KEY);
 		}
 		
+		function RandomChoice(varray) {
+			return varray[Math.floor(Math.random() * varray.length)]
+		}
+		
 		function drop(col) {
 			var viewerId = wave.getViewer().getId();
 			debugPrint('viewerId = ' + viewerId);
@@ -186,7 +190,9 @@
 			
 			var lastPlayer = state.get(LAST_PLAYER_KEY, '')
 			if (viewerId == lastPlayer) {
-				alert(PATIENCE_QUOTES[Math.floor(Math.random() * PATIENCE_QUOTES.length)])
+				// we don't allow double turns.
+				// TODO: this restriction should be enforced server-side as well.
+				alert(RandomChoice(PATIENCE_QUOTES))
 				return
 			}
 			
