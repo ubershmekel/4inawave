@@ -189,11 +189,13 @@
 				alert(PATIENCE_QUOTES[Math.floor(Math.random() * PATIENCE_QUOTES.length)])
 				return
 			}
-			var grid = getGridFromState(state);
-			grid.drop(col, viewerId);
-			debugPrint('grid = \n' + grid.toString());
 			
-			state.submitValue(GRID_KEY, grid.hash());
+			var grid = getGridFromState(state)
+			grid.drop(col, viewerId)
+			debugPrint('grid = \n' + grid.toString())
+			
+			state.submitValue(GRID_KEY, grid.hash())
+			state.submitValue(LAST_PLAYER_KEY, viewerId)
 		}
 		
 		
