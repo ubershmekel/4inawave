@@ -159,9 +159,9 @@
 			debugPrint('state1 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_NAME);
 			//state.submitValue(GRID_NAME, null);
 			//state.submitValue(GRID_NAME, JSON.stringify(Grid.BLANK));
-			state.reset()
+			//state.reset()
+			state.submitDelta({GRID_NAME: JSON.stringify(Grid.BLANK)})
 			debugPrint('state2 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_NAME);
-			state.invoke()
 		}
 		
 		function drop(col) {
