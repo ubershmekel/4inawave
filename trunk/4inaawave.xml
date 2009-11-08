@@ -316,7 +316,7 @@
 				<tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
 			</tbody>
 		</table>
-		<div class="makes_space" style="height: 32px;">&nbsp;</div>
+		<div class="makes_space" style="height: 100px;">&nbsp;...</div>
 ]]>
 </Content>
 </Module>
