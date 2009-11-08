@@ -192,7 +192,7 @@
 		function drawSquare(style, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			slot = $(query)
-			slot.html('<img src="{0}" style="width:32px; height:32px;" />'.format(style))
+			slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" />', style))
 			//slot.css('background', style)
 		}
 
