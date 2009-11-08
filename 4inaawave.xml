@@ -35,7 +35,7 @@
 		}
 		
 		function getGridFromState(state) {
-			grid = new Grid(state.get(GRID_NAME, ''))
+			grid = new Grid(state.get(GRID_KEY, ''))
 			return grid
 		}
 		
@@ -68,8 +68,10 @@
 			}
 		}
 		
-		GRID_NAME = 'grid_0'
+		GRID_KEY = 'grid_0'
+		LAST_PLAYER_KEY = 'last_playa'
 		EMPTY_SLOT = ''
+		PATIENCE_QUOTES = ["All human wisdom is summed up in two words - wait and hope", "Patience is the companion of wisdom.", "The two most powerful warriors are patience and time.", "He that can have Patience, can have what he will", "Patience and fortitude conquer all things", "Just wait for your turn, ever hear of manners?"]
 		
 		Grid.NUM_ROWS = 6
 		Grid.NUM_COLS = 7
@@ -169,23 +171,29 @@
 		
 		function restart() {
 			var state = wave.getState();
-			debugPrint('state1 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_NAME);
-			state.submitValue(GRID_NAME, null);
-			//state.submitValue(GRID_NAME, JSON.stringify(Grid.BLANK));
+			debugPrint('state1 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_KEY);
+			state.submitValue(GRID_KEY, null);
+			//state.submitValue(GRID_KEY, JSON.stringify(Grid.BLANK));
 			//state.reset()
-			//state.submitDelta({GRID_NAME: JSON.stringify(Grid.BLANK)})
-			debugPrint('state2 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_NAME);
+			//state.submitDelta({GRID_KEY: JSON.stringify(Grid.BLANK)})
+			debugPrint('state2 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_KEY);
 		}
 		
 		function drop(col) {
 			var viewerId = wave.getViewer().getId();
 			debugPrint('viewerId = ' + viewerId);
 			var state = wave.getState();
+			
+			var lastPlayer = state.get(LAST_PLAYER_KEY, '')
+			if (viewerId == lastPlayer) {
+				alert(PATIENCE_QUOTES[Math.floor(Math.random() * PATIENCE_QUOTES.length)])
+				return
+			}
 			var grid = getGridFromState(state);
 			grid.drop(col, viewerId);
 			debugPrint('grid = \n' + grid.toString());
 			
-			state.submitValue(GRID_NAME, grid.hash());
+			state.submitValue(GRID_KEY, grid.hash());
 		}
 		
 		
@@ -218,6 +226,9 @@
 					} else {
 						style = ""
 					}
+					// TODO: Optimization - don't redraw empty cells
+					// the $(query) is expensive, so only clear the board upon
+					// reset.
 					drawSquare(style, row, col);
 				}
 			}
@@ -239,7 +250,7 @@
 		<style type='text/css'>
 			.col {
 				border: 1px solid gray;
-				height: 34px;
+				height: 34px; /* I don't know why we need 34 and not 32 :*/
 				width: 32px;
 				padding: 0px;
 			}
