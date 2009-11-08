@@ -195,7 +195,7 @@
 			if (style) {
 				slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" />', style))
 			} else {
-				slot.html('')
+				slot.html('&nbsp;')
 			}
 			//slot.css('background', style)
 		}
@@ -213,7 +213,7 @@
 					slot = grid._get(row, col);
 					if (slot != EMPTY_SLOT) {
 						id = slot
-						userFace = "url('" + wave.getParticipantById(id).getThumbnailUrl() + "') no-repeat top center"
+						userFace = wave.getParticipantById(id).getThumbnailUrl()
 						style = userFace
 					} else {
 						style = ""
