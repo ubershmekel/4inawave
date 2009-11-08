@@ -239,8 +239,8 @@
 		<style type='text/css'>
 			.col {
 				border: 1px solid gray;
-				height: 33px;
-				width: 33px;
+				height: 32px;
+				width: 32px;
 				padding: 0px;
 			}
 			.col:first-child {
