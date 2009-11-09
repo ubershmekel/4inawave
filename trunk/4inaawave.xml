@@ -4,9 +4,7 @@
 		description="Play the familiar game with your friends on a Google Wave"
 		author="Yuval (Kalugny and Greenfield) (based on code by Raphael Speyer)"
 		author_email=""
-		author_location="" height="300"
-		screenshot="http://rspeyer.googlepages.com/connect4_screenshot.png"
-		thumbnail="http://rspeyer.googlepages.com/connect4_thumbnail.png">
+		author_location="" height="300">
 		<Require feature="wave" />
 	</ModulePrefs>
 	<Content type="html">
@@ -204,7 +202,7 @@
 				// we don't allow double turns.
 				// TODO: this restriction should be enforced server-side as well.
 				alert(RandomChoice(PATIENCE_QUOTES))
-				return
+				//return
 			}
 			
 			var grid = getGridFromState(state)
