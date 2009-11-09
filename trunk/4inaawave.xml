@@ -283,7 +283,7 @@
 			}
 			
 			if (won == 'true') {
-				winner = 
+				winner = state.get(LAST_PLAYER_KEY, '')
 				$("#messages").html(wave.getParticipantById(winner).getDisplayName() + ' won!');
 				
 			}
