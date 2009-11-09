@@ -218,7 +218,7 @@
 			
 		}
 
-		function highlightCol(, col){
+		function highlightCol(col){
 			for (var i = 0; i < Grid.NUM_ROWS; i++){
 				$(".row:eq(" + i + ") .col:eq(" + col + ")").css("background", "lightblue");
 			}
