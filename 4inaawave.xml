@@ -178,6 +178,7 @@
 			delta = {}
 			delta[GRID_KEY] = null
 			delta[LAST_PLAYER_KEY] = null
+			delta[GAME_WON] = null
 			
 			state.submitDelta(delta)
 			
