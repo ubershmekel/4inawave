@@ -68,8 +68,8 @@
 			}
 		}
 		
-		GRID_KEY = 'grid_0'
-		LAST_PLAYER_KEY = 'last_playa'
+		//GRID_KEY = 'grid_0'
+		//LAST_PLAYER_KEY = 'last_playa'
 		EMPTY_SLOT = ''
 		PATIENCE_QUOTES = ["All human wisdom is summed up in two words - wait and hope",
 			"Patience is the companion of wisdom.",
@@ -181,10 +181,10 @@
 			debugPrint('state1 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_KEY);
 			
 			state.submitDelta({
-				//GRID_KEY: '',
-				//LAST_PLAYER_KEY: ''
-				'grid_0': null,
-				'last_playa': null
+				GRID_KEY: null,
+				LAST_PLAYER_KEY: null
+				//'grid_0': null,
+				//'last_playa': null
 				})
 			//state.submitValue(GRID_KEY, null);
 			//state.submitValue(LAST_PLAYER_KEY, null);
@@ -218,10 +218,10 @@
 			//state.submitValue(GRID_KEY, grid.hash())
 			//state.submitValue(LAST_PLAYER_KEY, viewerId)
 			state.submitDelta({
-				//GRID_KEY: grid.hash(),
-				//LAST_PLAYER_KEY: viewerId
-				'grid_0': grid.hash(),
-				'last_playa': viewerId
+				GRID_KEY: grid.hash(),
+				LAST_PLAYER_KEY: viewerId
+				//'grid_0': grid.hash(),
+				//'last_playa': viewerId
 				})
 			
 		}
