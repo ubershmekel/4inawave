@@ -218,12 +218,17 @@
 			
 		}
 
-		function highlightCol(col){
-			$(".col:eq(" + col + ")").css("background", "lightblue");
+		function highlightCol(, col){
+			for (var i = 0; i < Grid.NUM_ROWS; i++){
+				$(".row:eq(" + i + ") .col:eq(" + col + ")").css("background", "lightblue");
+			}
+			
 		}
 		
 		function restoreCol(col){
-			$(".col:eq(" + col + ")").css("background", "none");
+			for (var i = 0; i < Grid.NUM_ROWS; i++){
+				$(".row:eq(" + i + ") .col:eq(" + col + ")").css("background", "none");
+			}
 		}
 		
 		function drawSquare(style, row, col) {
