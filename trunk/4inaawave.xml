@@ -179,7 +179,6 @@
 			delta[GRID_KEY] = null
 			delta[LAST_PLAYER_KEY] = null
 			delta[GAME_WON] = null
-			$("#messages").html('');
 			
 			state.submitDelta(delta)
 			
@@ -254,12 +253,8 @@
 			
 			var state = wave.getState();
 			won = state.get(GAME_WON, 'false')
-			if (won == 'true')
-			{
-				winner = state.get(LAST_PLAYER_KEY, '')
-				$("#messages").html(winner + ' won!');
-				return;
-			}
+
+			$("#messages").html('');
 			var grid = getGridFromState(state);
 
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
@@ -277,6 +272,11 @@
 					// reset.
 					drawSquare(style, row, col);
 				}
+			}
+			if (won == 'true')
+			{
+				winner = state.get(LAST_PLAYER_KEY, '')
+				$("#messages").html(winner + ' won!');
 			}
 			
 		}
@@ -317,7 +317,7 @@
 				color: #FFFFFF;
 			}
 		</style>
-		<button id='restart' onClick='restart()'>restart</button><div class="messages"></div>
+		<button id='restart' onClick='restart()'>restart</button><div id="messages"></div>
 		<br/><br/>
 		<table id='board' cellpadding='0' cellspacing='0'>
 			<tbody>
