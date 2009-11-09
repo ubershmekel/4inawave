@@ -217,7 +217,14 @@
 			state.submitDelta(delta)
 			
 		}
+
+		function highlightCol(col){
+			$(".col:eq(" + col + ")").css("background", "light blue");
+		}
 		
+		function restoreCol(col){
+			$(".col:eq(" + col + ")").css("background", "none");
+		}
 		
 		function drawSquare(style, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
@@ -320,7 +327,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='$(".col:eq(0)").css("background", "blue")'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
+				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
 				<tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
 				<tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
 				<tr class='row'><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td><td class='col'>&nbsp;</td></tr class='row'>
