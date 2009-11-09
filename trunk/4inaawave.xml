@@ -69,6 +69,7 @@
 		}
 		
 		GRID_KEY = 'grid_0'
+		GAME_WON = 'won'
 		LAST_PLAYER_KEY = 'last_playa'
 		EMPTY_SLOT = ''
 		PATIENCE_QUOTES = ["All human wisdom is summed up in two words - wait and hope",
@@ -122,12 +123,12 @@
 			return false
 		}
 
-		Grid.prototype.lineLength = function(player, row, col, direction) {
+		Grid.prototype.lineLength = function(player_id, row, col, direction) {
 			if (0 > row || row >= Grid.NUM_ROWS || 0 > col || col >= Grid.NUM_COLS) {
 				return 0
 			}
 			var whose = this._get(row, col)
-			if (whose == player.id) { // still on the line 
+			if (whose == player_id) { // still on the line 
 				var next = this.nextCoords(row, col, direction)
 				return 1 + this.lineLength(player, next[0], next[1], direction)
 			} else {
@@ -147,10 +148,6 @@
 				case 'S' : return [row-1, col	];
 				default: throw 'WTF is '+direction+'?'
 			}
-		}
-
-		Grid.prototype.evaluate = function(player1, player2) {
-			return 0
 		}
 
 		Grid.prototype.toString = function() {
@@ -197,7 +194,11 @@
 			var viewerId = wave.getViewer().getId();
 			debugPrint('viewerId = ' + viewerId);
 			var state = wave.getState();
-			
+			var gameWon = state.get(GAME_WON, 'false')
+			if (gameWon == 'true')
+			{
+				return;
+			}
 			var lastPlayer = state.get(LAST_PLAYER_KEY, '')
 			if (viewerId == lastPlayer) {
 				// we don't allow double turns.
@@ -209,10 +210,13 @@
 			var grid = getGridFromState(state)
 			grid.drop(col, viewerId)
 			debugPrint('grid = \n' + grid.toString())
-			
+
 			delta = {}
 			delta[GRID_KEY] = grid.hash()
 			delta[LAST_PLAYER_KEY] = viewerId
+			if (grid.connect4(viewerId, col)){
+				delta[GAME_WON] = 'true'
+			}
 			
 			state.submitDelta(delta)
 			
@@ -249,7 +253,16 @@
 			}
 			
 			var state = wave.getState();
+			won = state.get(GAME_WON, 'false')
+			if (won == 'true')
+			{
+				winner = state.get(LAST_PLAYER_KEY, '')
+				userFace = wave.getParticipantById(winner).getThumbnailUrl()
+				$("#board").html('<tr><td><img src="' + userFace + '" style="width:224px height:192px; "/>')
+				return;
+			}
 			var grid = getGridFromState(state);
+
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
 				for (var col = 0; col < Grid.NUM_COLS; ++col) {
 					slot = grid._get(row, col);
@@ -300,18 +313,6 @@
 				border-right: 2px solid gray;
 			}*/
 
-			.dropper {
-				height: 38px; width: 100%; border: 0px;
-			}
-			
-			.dropper:hover {
-				background-position: bottom center;
-			}
-
-			.mine	 {
-				background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center;
-			}
-			
 			button {
 				background-color: #5590D2;
 				color: #FFFFFF;
