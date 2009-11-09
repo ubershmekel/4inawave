@@ -299,6 +299,11 @@
 			.mine	 {
 				background: url('http://www.raphscallion.com/gadgets/fourinarow/gui/red.png') no-repeat top center;
 			}
+			
+			button {
+				background-color: #5590D2;
+				color: #FFFFFF;
+			}
 		</style>
 		<button id='restart' onClick='restart()'>restart</button>
 		<br/><br/>
