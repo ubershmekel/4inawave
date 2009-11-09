@@ -213,7 +213,7 @@
 			delta = {}
 			delta[GRID_KEY] = grid.hash()
 			delta[LAST_PLAYER_KEY] = viewerId
-			if (grid.connect4(viewerId, col)){
+			if (grid.connects4(viewerId, col)){
 				delta[GAME_WON] = 'true'
 			}
 			
