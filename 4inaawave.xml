@@ -276,7 +276,7 @@
 			
 			lastPlayer = state.get(LAST_PLAYER_KEY, '')
 			
-			if (lastPlayer != LAST_PLAYER_KEY) {
+			if (lastPlayer != wave.getViewer().getId()) {
 				$("#messages").html("Go go go")
 			} else {
 				$("#messages").html("")
