@@ -179,6 +179,7 @@
 			delta[GRID_KEY] = null
 			delta[LAST_PLAYER_KEY] = null
 			delta[GAME_WON] = null
+			$("#messages").html('');
 			
 			state.submitDelta(delta)
 			
@@ -256,8 +257,7 @@
 			if (won == 'true')
 			{
 				winner = state.get(LAST_PLAYER_KEY, '')
-				userFace = wave.getParticipantById(winner).getThumbnailUrl()
-				$("#board").html('<tr><td><img src="' + userFace + '" style="width:224px height:192px; "/>')
+				$("#messages").html(winner + ' won!');
 				return;
 			}
 			var grid = getGridFromState(state);
@@ -317,7 +317,7 @@
 				color: #FFFFFF;
 			}
 		</style>
-		<button id='restart' onClick='restart()'>restart</button>
+		<button id='restart' onClick='restart()'>restart</button><div class="messages"></div>
 		<br/><br/>
 		<table id='board' cellpadding='0' cellspacing='0'>
 			<tbody>
