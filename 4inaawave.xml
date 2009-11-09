@@ -203,7 +203,7 @@
 				// we don't allow double turns.
 				// TODO: this restriction should be enforced server-side as well.
 				alert(RandomChoice(PATIENCE_QUOTES))
-				//return
+				return
 			}
 			
 			var grid = getGridFromState(state)
