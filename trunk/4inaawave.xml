@@ -218,8 +218,10 @@
 			//state.submitValue(GRID_KEY, grid.hash())
 			//state.submitValue(LAST_PLAYER_KEY, viewerId)
 			state.submitDelta({
-				GRID_KEY: grid.hash(),
-				LAST_PLAYER_KEY: viewerId
+				//GRID_KEY: grid.hash(),
+				//LAST_PLAYER_KEY: viewerId
+				'grid_0': grid.hash(),
+				'last_playa': viewerId
 				})
 			
 		}
