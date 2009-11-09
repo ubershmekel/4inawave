@@ -16,6 +16,7 @@
 				height: 20em;
 				overflow: scroll;
 				width: 20em;
+				display: none;
 			}
 		</style>
 		<pre id="debug">&nbsp;</pre>
@@ -254,7 +255,6 @@
 			var state = wave.getState();
 			won = state.get(GAME_WON, 'false')
 
-			$("#messages").html('');
 			var grid = getGridFromState(state);
 
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
@@ -273,10 +273,19 @@
 					drawSquare(style, row, col);
 				}
 			}
-			if (won == 'true')
-			{
-				winner = state.get(LAST_PLAYER_KEY, '')
+			
+			lastPlayer = state.get(LAST_PLAYER_KEY, '')
+			
+			if (lastPlayer != LAST_PLAYER_KEY) {
+				$("#messages").html("Go go go")
+			} else {
+				$("#messages").html("")
+			}
+			
+			if (won == 'true') {
+				winner = 
 				$("#messages").html(wave.getParticipantById(winner).getDisplayName() + ' won!');
+				
 			}
 			
 		}
