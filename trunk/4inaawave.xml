@@ -219,7 +219,7 @@
 		}
 
 		function highlightCol(col){
-			$(".col:eq(" + col + ")").css("background", "light blue");
+			$(".col:eq(" + col + ")").css("background", "lightblue");
 		}
 		
 		function restoreCol(col){
