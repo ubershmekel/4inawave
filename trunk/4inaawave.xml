@@ -337,8 +337,10 @@
 			}
 		</style>
 		<center>
-		<button id='restart' onClick='restart()'>restart</button><br/>
-		<div id="messages"></div>
+		<table>
+		<tr><td><button id='restart' onClick='restart()'>restart</button></td></tr>
+		<tr><td><div id="messages"></div></td></tr>
+		</table>
 		<br/><br/>
 		<table id='board' cellpadding='0' cellspacing='0'>
 			<tbody>
