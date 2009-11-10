@@ -284,7 +284,7 @@
 			if (lastPlayer != wave.getViewer().getId()) {
 				$("#messages").html("Go go go")
 			} else {
-				$("#messages").html("")
+				$("#messages").html("&nbsp;")
 			}
 			
 			if (won == 'true') {
