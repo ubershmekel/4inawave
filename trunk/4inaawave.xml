@@ -282,14 +282,14 @@
 			lastPlayer = state.get(LAST_PLAYER_KEY, '')
 			
 			if (lastPlayer != wave.getViewer().getId()) {
-				$("#messages").html("Go go go")
+				$("#messages").html("Go go go!")
 			} else {
 				$("#messages").html("&nbsp;")
 			}
 			
 			if (won == 'true') {
-				winner = state.get(LAST_PLAYER_KEY, '')
-				$("#messages").html(wave.getParticipantById(winner).getDisplayName() + ' won!');
+				winner = wave.getParticipantById(state.get(LAST_PLAYER_KEY, ''))
+				$("#messages").html('<img src="' + winner.getThumbnailUrl() + '"/> ' + winner.getDisplayName() + ' won!');
 				
 			}
 			
