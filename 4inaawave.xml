@@ -336,8 +336,12 @@
 				float: left;
 			}
 		</style>
-		<button id='restart' onClick='restart()'>restart</button>
-		<div id="messages"></div>
+		<center>
+		<table>
+		<tr>
+		<td><button id='restart' onClick='restart()'>restart</button></td>
+		<td><div id="messages"></div></td>
+		</table>
 		<br/><br/>
 		<table id='board' cellpadding='0' cellspacing='0'>
 			<tbody>
@@ -350,6 +354,7 @@
 			</tbody>
 		</table>
 		<br /> <br />
+		</center>
 ]]>
 </Content>
 </Module>
