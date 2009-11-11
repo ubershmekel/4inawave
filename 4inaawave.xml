@@ -242,13 +242,15 @@
 		
 		function drawSquare(slot_state, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
-			slot = $(query)
-			if (slot_state) {
-				slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" alt="{0}" title="{0}" />', slot_state))
+			element = $(query)
+			if (slot_state == EMPTY_SLOT) {
+				element.html('&nbsp;')
 			} else {
-				slot.html('&nbsp;')
+				id = slot_state
+				userFace = wave.getParticipantById(id).getThumbnailUrl()
+				img_html = String.format('<img src="{1}" style="width:32px; height:32px;" alt="{0}" title="{0}" />', id, userFace)
+				element.html(img_html)
 			}
-			
 		}
 
 		function renderInfo() {
@@ -265,17 +267,10 @@
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
 				for (var col = 0; col < Grid.NUM_COLS; ++col) {
 					slot = grid._get(row, col);
-					if (slot != EMPTY_SLOT) {
-						id = slot
-						userFace = wave.getParticipantById(id).getThumbnailUrl()
-						style = userFace
-					} else {
-						style = ""
-					}
 					// TODO: Optimization - don't redraw empty cells
 					// the $(query) is expensive, so only clear the board upon
 					// reset.
-					drawSquare(style, row, col);
+					drawSquare(slot, row, col);
 				}
 			}
 			
