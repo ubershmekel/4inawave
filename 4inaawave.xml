@@ -240,15 +240,15 @@
 			}
 		}
 		
-		function drawSquare(style, row, col) {
+		function drawSquare(slot_state, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			slot = $(query)
-			if (style) {
-				slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" />', style))
+			if (slot_state) {
+				slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" alt="{0}" title="{0}" />', slot_state))
 			} else {
 				slot.html('&nbsp;')
 			}
-			//slot.css('background', style)
+			
 		}
 
 		function renderInfo() {
