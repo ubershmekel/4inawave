@@ -356,16 +356,6 @@
 		
 		<div id='victory_shot'></div>
 		</center>
-		<script type="text/javascript" src="konami.js"></script>
-		<script type="text/javascript">
-			konami.code = function() {
-				alert("ok")
-				$("debug").style("display", "block")
-				}
-
-			konami.load()
-		</script>
-
 ]]>
 </Content>
 </Module>
