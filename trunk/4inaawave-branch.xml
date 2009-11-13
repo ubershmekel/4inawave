@@ -256,7 +256,7 @@
 		}
 
 		function renderInfo() {
-			alert(name)
+			name = "asdf"
 			
 			debugPrint('renderInfo')
 			if (!wave.getState()) {
