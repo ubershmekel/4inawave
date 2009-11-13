@@ -23,6 +23,7 @@
 		
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'/></script>
 		<script type='text/javascript'>
+		
 		String.format = function() {
 			var s = arguments[0];
 			for (var i = 0; i < arguments.length - 1; i++) {
@@ -239,19 +240,15 @@
 			}
 		}
 		
-		function drawSquare(slot_state, row, col) {
+		function drawSquare(style, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
-			element = $(query)
-			if (slot_state == EMPTY_SLOT) {
-				element.html('&nbsp;')
+			slot = $(query)
+			if (style) {
+				slot.html(String.format('<img src="{0}" style="width:32px; height:32px;" />', style))
 			} else {
-				id = slot_state
-				user = wave.getParticipantById(id)
-				userFace = user.getThumbnailUrl()
-				name = user.getDisplayName()
-				img_html = String.format('<img src="{0}" style="width:32px; height:32px;" alt="{1}" title="{1}" />', userFace, name)
-				element.html(img_html)
+				slot.html('&nbsp;')
 			}
+			//slot.css('background', style)
 		}
 
 		function renderInfo() {
@@ -268,10 +265,17 @@
 			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
 				for (var col = 0; col < Grid.NUM_COLS; ++col) {
 					slot = grid._get(row, col);
+					if (slot != EMPTY_SLOT) {
+						id = slot
+						userFace = wave.getParticipantById(id).getThumbnailUrl()
+						style = userFace
+					} else {
+						style = ""
+					}
 					// TODO: Optimization - don't redraw empty cells
 					// the $(query) is expensive, so only clear the board upon
 					// reset.
-					drawSquare(slot, row, col);
+					drawSquare(style, row, col);
 				}
 			}
 			
@@ -285,8 +289,7 @@
 			
 			if (won == 'true') {
 				winner = wave.getParticipantById(state.get(LAST_PLAYER_KEY, ''))
-				$("#messages").html(winner.getDisplayName() + ' won!');
-				$("#victory_shot").html('<img src="' + winner.getThumbnailUrl() + '"/>')
+				$("#messages").html('<img src="' + winner.getThumbnailUrl() + '"/> ' + winner.getDisplayName() + ' won!');
 				
 			}
 			
@@ -332,11 +335,6 @@
 			#messages {
 				float: left;
 			}
-			
-			#board, #victory_shot {
-				display: inline-block;
-			}
-			
 		</style>
 		<center>
 		<table>
@@ -353,8 +351,7 @@
 				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col' onclick='drop(1)' onmouseover='highlightCol(1)' onmouseout='restoreCol(1)'>&nbsp;</td><td class='col' onclick='drop(2)' onmouseover='highlightCol(2)' onmouseout='restoreCol(2)'>&nbsp;</td><td class='col' onclick='drop(3)' onmouseover='highlightCol(3)' onmouseout='restoreCol(3)'>&nbsp;</td><td class='col' onclick='drop(4)' onmouseover='highlightCol(4)' onmouseout='restoreCol(4)'>&nbsp;</td><td class='col' onclick='drop(5)' onmouseover='highlightCol(5)' onmouseout='restoreCol(5)'>&nbsp;</td><td class='col' onclick='drop(6)' onmouseover='highlightCol(6)' onmouseout='restoreCol(6)'>&nbsp;</td></tr class='row'>
 			</tbody>
 		</table>
-		
-		<div id='victory_shot'></div>
+		<br /> <br />
 		</center>
 ]]>
 </Content>
