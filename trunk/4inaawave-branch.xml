@@ -242,7 +242,7 @@
 		function drawSquare(slot_state, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			element = $(query)
-			if (slot_state) {
+			if (!slot_state) {
 				element.html('&nbsp;')
 			} else {
 				id = slot_state
