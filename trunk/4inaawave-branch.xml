@@ -23,6 +23,7 @@
 		
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'/></script>
 		<script type='text/javascript'>
+		
 		String.format = function() {
 			var s = arguments[0];
 			for (var i = 0; i < arguments.length - 1; i++) {
@@ -247,19 +248,15 @@
 			} else {
 				id = slot_state
 				user = wave.getParticipantById(id)
-				alert(user)
 				userFace = user.getThumbnailUrl()
-				alert(userFace)
 				name = user.getDisplayName()
-				alert(name)
 				img_html = String.format('<img src="{0}" style="width:32px; height:32px;" alt="{1}" title="{1}" />', userFace, name)
-				alert(img_html)
 				element.html(img_html)
-				alert('elemented')
 			}
 		}
 
 		function renderInfo() {
+			alert('renderinfo')
 			debugPrint('renderInfo')
 			if (!wave.getState()) {
 				return;
