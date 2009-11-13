@@ -256,11 +256,8 @@
 		}
 
 		function renderInfo() {
-			alert(1)
-			var stuff = [id, user, userFace]
-			alert(2)
-			var bstuff = [name, img_html, element]
-			alert(3)
+			alert(name)
+			
 			debugPrint('renderInfo')
 			if (!wave.getState()) {
 				return;
