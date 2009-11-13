@@ -242,15 +242,20 @@
 		function drawSquare(slot_state, row, col) {
 			query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
 			element = $(query)
-			if (!slot_state) {
+			if (slot_state == EMPTY_SLOT) {
 				element.html('&nbsp;')
 			} else {
 				id = slot_state
 				user = wave.getParticipantById(id)
+				alert(user)
 				userFace = user.getThumbnailUrl()
+				alert(userFace)
 				name = user.getDisplayName()
+				alert(name)
 				img_html = String.format('<img src="{0}" style="width:32px; height:32px;" alt="{1}" title="{1}" />', userFace, name)
+				alert(img_html)
 				element.html(img_html)
+				alert('elemented')
 			}
 		}
 
