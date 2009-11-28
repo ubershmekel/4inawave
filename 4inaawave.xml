@@ -44,7 +44,8 @@
 		}
 		
 		function Grid(jsonGrid) {
-			parsedGrid = JSON.parse(jsonGrid)
+			alert(jsonGrid)
+			var parsedGrid = JSON.parse(jsonGrid)
 			var pieces
 			
 			if (parsedGrid) {
