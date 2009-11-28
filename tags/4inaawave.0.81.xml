@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="Four in a Wave"
+		description="Play the familiar game with your friends on a Google Wave"
+		author="Yuval (Kalugny and Greenfield) (based on code by Raphael Speyer)"
+		author_email=""
+		author_location="" height="300">
+		<Require feature="wave" />
+	</ModulePrefs>
+	<Content type="html">
+		<![CDATA[
+		
+		<style type='text/css'>
+			#debug {
+				float: right;
+				height: 20em;
+				overflow: scroll;
+				width: 20em;
+				display: none;
+			}
+		</style>
+		<pre id="debug">&nbsp;</pre>
+		
+		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'/></script>
+		<script type='text/javascript'>
+		
+		String.format = function() {
+			var s = arguments[0];
+			for (var i = 0; i < arguments.length - 1; i++) {
+				var reg = new RegExp("\\{" + i + "\\}", "gm");
+				s = s.replace(reg, arguments[i + 1]);
+			}
+		  return s;
+		}
+		
+		function getGridFromState(state) {
+			grid = new Grid(state.get(GRID_KEY, ''))
+			return grid
+		}
+		
+		function DeepCopy(oldObject) {
+			var newObject = jQuery.extend(true, {}, oldObject);
+			return newObject
+		}
+		
+		function Grid(jsonGrid) {
+			
+			var pieces
+			
+			if (jsonGrid == "") {
+				// copy constructor
+				pieces = DeepCopy(Grid.BLANK)
+			} else {
+				pieces = JSON.parse(jsonGrid)
+			}
+			
+			this._get = function(row, col) {
+				return pieces[row][col]
+			}
+
+			this._set = function(row, col, value) {
+				pieces[row][col] = value
+			}
+			
+			this.hash = function() {
+				return JSON.stringify(pieces)
+			}
+		}
+		
+		GRID_KEY = 'grid_0'
+		GAME_WON = 'won'
+		LAST_PLAYER_KEY = 'last_playa'
+		EMPTY_SLOT = ''
+		PATIENCE_QUOTES = ["All human wisdom is summed up in two words - wait and hope",
+			"Patience is the companion of wisdom.",
+			"The two most powerful warriors are patience and time.",
+			"He that can have patience, can have what he will",
+			"Patience and fortitude conquer all things",
+			"'Wait' is defined as 'to stay in place in expectation of.'",
+			"Patience is the art of concealing your impatience.",
+			"Patience is the support of weakness; impatience the ruin of strength.",
+			"You can finish building Rome while you wait for your turn.",
+			"Troz!",
+			"You can't hurry love, no you just have to wait.",
+			"I'd say 'hold your horses' but you don't have a horse, do you.",
+			"Just wait for your turn, ever hear of manners?"]
+		
+		Grid.NUM_ROWS = 6
+		Grid.NUM_COLS = 7
+		Grid.DIR_PAIRS = [['NE','SW'], ['E','W'], ['SE','NW'], ['N','S']]
+		Grid.BLANK = [[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT],
+						[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT],
+						[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT],
+						[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT],
+						[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT],
+						[EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT]]
+
+		Grid.prototype.drop = function(col, player_id) {
+			var row = this.topFreeRow(col)
+			if (row == -1) {
+				throw 'column full'
+			}
+			this._set(row, col, player_id)
+		}
+
+		Grid.prototype.topFreeRow = function(col) {
+			for (var row = 0; row < Grid.NUM_ROWS; row += 1) {
+				if (this._get(row, col) == EMPTY_SLOT) {
+					return row
+				}
+			}
+			return -1
+		}
+
+		Grid.prototype.connects4 = function(player, col) {
+			var row = this.topFreeRow(col) - 1
+			if (row < 0) { row = Grid.NUM_ROWS - 1 } // TODO clean up
+			for (var i in Grid.DIR_PAIRS) {
+				var dirs = Grid.DIR_PAIRS[i]
+				var first = this.lineLength(player, row, col, dirs[0], 0)
+				var second = this.lineLength(player, row, col, dirs[1], 0)
+				var length = first + second
+				if (length > 4) { 
+					return true
+				}
+			}
+			return false
+		}
+
+		Grid.prototype.lineLength = function(player_id, row, col, direction) {
+			if (0 > row || row >= Grid.NUM_ROWS || 0 > col || col >= Grid.NUM_COLS) {
+				return 0
+			}
+			var whose = this._get(row, col)
+			if (whose == player_id) { // still on the line 
+				var next = this.nextCoords(row, col, direction)
+				return 1 + this.lineLength(player_id, next[0], next[1], direction)
+			} else {
+				return 0 
+			}
+		}
+
+		Grid.prototype.nextCoords = function(row, col, direction) {
+			switch(direction) {
+				case 'NE': return [row+1, col+1];
+				case 'SW': return [row-1, col-1];
+				case 'E' : return [row	, col+1];
+				case 'W' : return [row	, col-1];
+				case 'SE': return [row-1, col+1];
+				case 'NW': return [row+1, col-1];
+				case 'N' : return [row+1, col	];
+				case 'S' : return [row-1, col	];
+				default: throw 'WTF is '+direction+'?'
+			}
+		}
+
+		Grid.prototype.toString = function() {
+			var str = ''
+			for (var row = Grid.NUM_ROWS - 1; row >= 0; row -= 1) {
+				str += row + ' '
+				for (var col = 0; col < Grid.NUM_COLS; col += 1) {
+					slot = this._get(row, col)
+					if (slot != EMPTY_SLOT) {
+						slot = slot[0]
+					} else {
+						slot = ' '
+					}
+					str += slot + ' '
+				}
+				str += '\n'
+			}
+			str += '  1 2 3 4 5 6 7 \n'
+			return str
+		}
+		
+		function debugPrint(text){
+			document.getElementById('debug').innerHTML = text + '\n' + document.getElementById('debug').innerHTML;
+		}
+		
+		function restart() {
+			var state = wave.getState();
+			debugPrint('state1 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_KEY);
+			
+			var delta = {}
+			delta[GRID_KEY] = null
+			delta[LAST_PLAYER_KEY] = null
+			delta[GAME_WON] = null
+			
+			state.submitDelta(delta)
+			
+			debugPrint('state2 = ' + state + '\nBLANK = ' + JSON.stringify(Grid.BLANK) + '\nGRID NAME = ' + GRID_KEY);
+		}
+		
+		function RandomChoice(varray) {
+			return varray[Math.floor(Math.random() * varray.length)]
+		}
+		
+		function drop(col) {
+			var viewerId = wave.getViewer().getId();
+			debugPrint('viewerId = ' + viewerId);
+			var state = wave.getState();
+			var gameWon = state.get(GAME_WON, 'false')
+			if (gameWon == 'true')
+			{
+				return;
+			}
+			var lastPlayer = state.get(LAST_PLAYER_KEY, '')
+			if (viewerId == lastPlayer) {
+				// we don't allow double turns.
+				// TODO: this restriction should be enforced server-side as well.
+				alert(RandomChoice(PATIENCE_QUOTES))
+				return
+			}
+			
+			var grid = getGridFromState(state)
+			grid.drop(col, viewerId)
+			debugPrint('grid = \n' + grid.toString())
+
+			delta = {}
+			delta[GRID_KEY] = grid.hash()
+			delta[LAST_PLAYER_KEY] = viewerId
+			if (grid.connects4(viewerId, col)){
+				delta[GAME_WON] = 'true'
+			}
+			
+			state.submitDelta(delta)
+			
+		}
+
+		function highlightCol(col){
+			for (var i = 0; i < Grid.NUM_ROWS; i++){
+				$(".row:eq(" + i + ") .col:eq(" + col + ")").css("background", "lightblue");
+			}
+			
+		}
+		
+		function restoreCol(col){
+			for (var i = 0; i < Grid.NUM_ROWS; i++){
+				$(".row:eq(" + i + ") .col:eq(" + col + ")").css("background", "none");
+			}
+		}
+		
+		function drawSquare(slot_state, row, col) {
+			var query = String.format('.row:eq({0}) .col:eq({1})', Grid.NUM_ROWS - row - 1, col)
+			var element = $(query)
+			if (slot_state == EMPTY_SLOT) {
+				element.html('&nbsp;')
+			} else {
+				var id = slot_state
+				var user = wave.getParticipantById(id)
+				var userFace = user.getThumbnailUrl()
+				var name = user.getDisplayName()
+				var img_html = String.format('<img src="{0}" style="width:32px; height:32px;" alt="{1}" title="{1}" />', userFace, name)
+				element.html(img_html)
+			}
+		}
+
+		function renderInfo() {
+			debugPrint('renderInfo')
+			if (!wave.getState()) {
+				return;
+			}
+			
+			var state = wave.getState();
+			var won = state.get(GAME_WON, 'false')
+
+			var grid = getGridFromState(state);
+
+			for (var row = 0; row < Grid.NUM_ROWS; ++row) {
+				for (var col = 0; col < Grid.NUM_COLS; ++col) {
+					slot = grid._get(row, col);
+					// TODO: Optimization - don't redraw empty cells
+					// the $(query) is expensive, so only clear the board upon
+					// reset.
+					drawSquare(slot, row, col);
+				}
+			}
+			
+			var lastPlayer = state.get(LAST_PLAYER_KEY, '')
+			
+			if (lastPlayer != wave.getViewer().getId()) {
+				$("#messages").html("Go go go!")
+			} else {
+				$("#messages").html("&nbsp;")
+			}
+			
+			if (won == 'true') {
+				var winner = wave.getParticipantById(state.get(LAST_PLAYER_KEY, ''))
+				$("#messages").html(winner.getDisplayName() + ' won!');
+				$("#victory_shot").html('<img src="' + winner.getThumbnailUrl() + '"/>');
+				
+			}
+		}
+		
+		function init() {
+			if (wave && wave.isInWaveContainer()) {
+			wave.setStateCallback(renderInfo);
+			wave.setParticipantCallback(renderInfo);
+			}
+		}
+		
+		debugPrint('Starting');
+		gadgets.util.registerOnLoadHandler(init);
+
+		</script>
+
+		<style type='text/css'>
+			.col {
+				border: 1px solid gray;
+				height: 34px; /* I don't know why we need 34 and not 32 :*/
+				width: 32px;
+				padding: 0px;
+			}
+			
+			.col img {
+				margin: 0px;
+			}
+			/*
+			.col:first-child {
+				border-left: 2px solid gray;
+			}
+			.col:last-child {
+				border-right: 2px solid gray;
+			}*/
+
+			button {
+				background-color: #5590D2;
+				color: #FFFFFF;
+				float: left;
+			}
+			
+			#messages {
+				float: left;
+			}
+			
+			#board, #victory_shot {
+				display: inline-block;
+			}
+			
+		</style>
+		<center>
+		<table>
+		<tr><td><button id='restart' onClick='restart()'>restart</button></td></tr>
+		<tr><td><div id="messages">&nbsp;</div></td></tr>
+		</table>
+		<table id='board' cellpadding='0' cellspacing='0'>
+			<tbody>
+				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col' onclick='drop(1)' onmouseover='highlightCol(1)' onmouseout='restoreCol(1)'>&nbsp;</td><td class='col' onclick='drop(2)' onmouseover='highlightCol(2)' onmouseout='restoreCol(2)'>&nbsp;</td><td class='col' onclick='drop(3)' onmouseover='highlightCol(3)' onmouseout='restoreCol(3)'>&nbsp;</td><td class='col' onclick='drop(4)' onmouseover='highlightCol(4)' onmouseout='restoreCol(4)'>&nbsp;</td><td class='col' onclick='drop(5)' onmouseover='highlightCol(5)' onmouseout='restoreCol(5)'>&nbsp;</td><td class='col' onclick='drop(6)' onmouseover='highlightCol(6)' onmouseout='restoreCol(6)'>&nbsp;</td></tr class='row'>
+				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col' onclick='drop(1)' onmouseover='highlightCol(1)' onmouseout='restoreCol(1)'>&nbsp;</td><td class='col' onclick='drop(2)' onmouseover='highlightCol(2)' onmouseout='restoreCol(2)'>&nbsp;</td><td class='col' onclick='drop(3)' onmouseover='highlightCol(3)' onmouseout='restoreCol(3)'>&nbsp;</td><td class='col' onclick='drop(4)' onmouseover='highlightCol(4)' onmouseout='restoreCol(4)'>&nbsp;</td><td class='col' onclick='drop(5)' onmouseover='highlightCol(5)' onmouseout='restoreCol(5)'>&nbsp;</td><td class='col' onclick='drop(6)' onmouseover='highlightCol(6)' onmouseout='restoreCol(6)'>&nbsp;</td></tr class='row'>
+				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col' onclick='drop(1)' onmouseover='highlightCol(1)' onmouseout='restoreCol(1)'>&nbsp;</td><td class='col' onclick='drop(2)' onmouseover='highlightCol(2)' onmouseout='restoreCol(2)'>&nbsp;</td><td class='col' onclick='drop(3)' onmouseover='highlightCol(3)' onmouseout='restoreCol(3)'>&nbsp;</td><td class='col' onclick='drop(4)' onmouseover='highlightCol(4)' onmouseout='restoreCol(4)'>&nbsp;</td><td class='col' onclick='drop(5)' onmouseover='highlightCol(5)' onmouseout='restoreCol(5)'>&nbsp;</td><td class='col' onclick='drop(6)' onmouseover='highlightCol(6)' onmouseout='restoreCol(6)'>&nbsp;</td></tr class='row'>
+				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col' onclick='drop(1)' onmouseover='highlightCol(1)' onmouseout='restoreCol(1)'>&nbsp;</td><td class='col' onclick='drop(2)' onmouseover='highlightCol(2)' onmouseout='restoreCol(2)'>&nbsp;</td><td class='col' onclick='drop(3)' onmouseover='highlightCol(3)' onmouseout='restoreCol(3)'>&nbsp;</td><td class='col' onclick='drop(4)' onmouseover='highlightCol(4)' onmouseout='restoreCol(4)'>&nbsp;</td><td class='col' onclick='drop(5)' onmouseover='highlightCol(5)' onmouseout='restoreCol(5)'>&nbsp;</td><td class='col' onclick='drop(6)' onmouseover='highlightCol(6)' onmouseout='restoreCol(6)'>&nbsp;</td></tr class='row'>
+				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col' onclick='drop(1)' onmouseover='highlightCol(1)' onmouseout='restoreCol(1)'>&nbsp;</td><td class='col' onclick='drop(2)' onmouseover='highlightCol(2)' onmouseout='restoreCol(2)'>&nbsp;</td><td class='col' onclick='drop(3)' onmouseover='highlightCol(3)' onmouseout='restoreCol(3)'>&nbsp;</td><td class='col' onclick='drop(4)' onmouseover='highlightCol(4)' onmouseout='restoreCol(4)'>&nbsp;</td><td class='col' onclick='drop(5)' onmouseover='highlightCol(5)' onmouseout='restoreCol(5)'>&nbsp;</td><td class='col' onclick='drop(6)' onmouseover='highlightCol(6)' onmouseout='restoreCol(6)'>&nbsp;</td></tr class='row'>
+				<tr class='row'><td class='col' onclick='drop(0)' onmouseover='highlightCol(0)' onmouseout='restoreCol(0)'>&nbsp;</td><td class='col' onclick='drop(1)' onmouseover='highlightCol(1)' onmouseout='restoreCol(1)'>&nbsp;</td><td class='col' onclick='drop(2)' onmouseover='highlightCol(2)' onmouseout='restoreCol(2)'>&nbsp;</td><td class='col' onclick='drop(3)' onmouseover='highlightCol(3)' onmouseout='restoreCol(3)'>&nbsp;</td><td class='col' onclick='drop(4)' onmouseover='highlightCol(4)' onmouseout='restoreCol(4)'>&nbsp;</td><td class='col' onclick='drop(5)' onmouseover='highlightCol(5)' onmouseout='restoreCol(5)'>&nbsp;</td><td class='col' onclick='drop(6)' onmouseover='highlightCol(6)' onmouseout='restoreCol(6)'>&nbsp;</td></tr class='row'>
+			</tbody>
+		</table>
+		
+		<div id='victory_shot'></div>
+		</center>
+]]>
+</Content>
+</Module>
