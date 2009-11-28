@@ -44,15 +44,14 @@
 		}
 		
 		function Grid(jsonGrid) {
-			alert(jsonGrid)
-			var parsedGrid = JSON.parse(jsonGrid)
+			
 			var pieces
 			
-			if (parsedGrid) {
-				pieces = parsedGrid
-			} else {
+			if (jsonGrid == "") {
 				// copy constructor
 				pieces = DeepCopy(Grid.BLANK)
+			} else {
+				pieces = JSON.parse(jsonGrid)
 			}
 			
 			this._get = function(row, col) {
