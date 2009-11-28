@@ -1,8 +1,10 @@
 <extension 
     name="4 In A Wave"
     thumbnailUrl="http://4inawave.googlecode.com/svn/trunk/images/thumbnail.gif"
-    description="Like 4 in a row but in a wave and the game chips are your profile pics."> 
-  <author name="Google"/> 
+    description="Like 4 in a row but in a wave and the game chips are your profile pics."
+    version="0.81"
+    >
+  <author name="Yuval and Yuval"/> 
   <menuHook location="toolbar" text="Add 4 In A Wave"
     iconUrl="http://4inawave.googlecode.com/svn/trunk/images/icon.png"> 
     <insertGadget url="http://4inawave.googlecode.com/files/4inaawave.0.81.xml"/> 
